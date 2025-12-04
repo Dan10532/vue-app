@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sales Page</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+
+<div id="app" class="container py-4">
+
+    <h1 class="mb-4">Sales Page</h1>
+
+    <!-- Add Sales Button -->
+    <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addSalesModal">
+        Add Sale
+    </button>
+
+    <!-- Add Sales Modal -->
+    <div class="modal fade" id="addSalesModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h5 class="modal-title">Add New Sale</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+                    <form @submit.prevent="addSale">
+                        <div class="mb-3">
+                            <label class="form-label">Product ID</label>
+                            <input type="number" class="form-control" v-model="newSale.product_id" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Quantity</label>
+                            <input type="number" class="form-control" v-model="newSale.quantity" required>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100">Submit</button>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Sales Table -->
+    <table class="table table-bordered mt-4">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Product ID</th>
+                <th>Quantity</th>
+                <th>Created At</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr v-for="sale in sales" :key="sale.id">
+                <td>{{ sale.id }}</td>
+                <td>{{ sale.product_id }}</td>
+                <td>{{ sale.quantity }}</td>
+                <td>{{ formatDate(sale.created_at) }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+</div> <!-- END APP -->
+
+<!-- Vue 2 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.7.7/vue.min.js"></script>
+
+<!-- Axios -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.8/axios.min.js"></script>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+new Vue({
+    el: "#app",
+
+    data: {
+        newSale: {
+            product_id: "",
+            quantity: ""
+        },
+        sales: []
+    },
+
+    methods: {
+
+        // Add sale
+        async addSale() {
+            try {
+                const token = localStorage.getItem("token");
+                if (!token) {
+                    alert("No token found. Please login.");
+                    window.location.href = "login.html";
+                    return;
+                }
+
+                const saleToSend = {
+                    product_id: Number(this.newSale.product_id),
+                    quantity: Number(this.newSale.quantity)
+                };
+
+                const response = await axios.post(
+                    "http://127.0.0.1:5000/sales",
+                    saleToSend,
+                    {
+                        headers: {
+                            "Content-Type": "application/json",
+                            "Authorization": "Bearer " + token
+                        }
+                    }
+                );
+
+                alert("Sale Added Successfully!");
+                this.fetchSales();
+
+                this.newSale = { product_id: "", quantity: "" };
+
+                const modalEl = document.getElementById('addSalesModal');
+                const modal = bootstrap.Modal.getInstance(modalEl);
+                modal.hide();
+
+            } catch (error) {
+                console.error("Add sale error:", error.response ? error.response.data : error);
+                alert("Failed to add sale: " + (error.response?.data?.message || JSON.stringify(error)));
+            }
+        },
+
+        // Fetch all sales
+        async fetchSales() {
+            try {
+                const token = localStorage.getItem("token");
+                if (!token) return;
+
+                const response = await axios.get(
+                    "http://127.0.0.1:5000/sales",
+                    {
+                        headers: {
+                            "Authorization": "Bearer " + token
+                        }
+                    }
+                );
+
+                this.sales = response.data;
+
+            } catch (error) {
+                console.error("Fetch error:", error.response ? error.response.data : error);
+                alert("Failed to fetch sales: " + (error.response?.data?.message || JSON.stringify(error)));
+            }
+        },
+
+       
+        formatDate(dateStr) {
+            const date = new Date(dateStr);
+            return date.toLocaleString();
+        }
+
+    },
+
+    mounted() {
+        const token = localStorage.getItem("token");
+        if (!token) {
+            alert("Please login first.");
+            window.location.href = "login.html";
+            return;
+        }
+        this.fetchSales();
+    }
+});
+</script>
+
+</body>
+</html>
