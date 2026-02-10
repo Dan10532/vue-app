@@ -190,14 +190,15 @@
       methods: {
         async loginUser() {
           try {
-            const response = await axios.post('http://127.0.0.1:5000/login', {
+            const response = await axios.post('http://127.0.0.1:8000/login', {
               email: this.email,
               password: this.password
             });
 
-            localStorage.setItem('token', response.data.token);
+            localStorage.setItem('token', response.data.access_token);
             alert("Login successful");
             window.location.href = "products.html";
+
 
           } catch (error) {
             console.error("Login failed", error);

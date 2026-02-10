@@ -223,7 +223,7 @@ new Vue({
         async fetchPurchases() {
             try {
                 const token = localStorage.getItem("token");
-                const res = await axios.get("http://127.0.0.1:5000/purchases", { headers: { Authorization: "Bearer " + token } });
+                const res = await axios.get("http://127.0.0.1:8000/purchases", { headers: { Authorization: "Bearer " + token } });
                 this.purchases = res.data;
                 setTimeout(() => { new DataTable('#purchaseTable'); }, 100);
             } catch (err) { console.error(err); }
@@ -231,7 +231,7 @@ new Vue({
         async addPurchase() {
             try {
                 const token = localStorage.getItem("token");
-                await axios.post("http://127.0.0.1:5000/purchases", {
+                await axios.post("http://127.0.0.1:8000/purchases", {
                     product_id: Number(this.newPurchase.product_id),
                     stock_quantity: Number(this.newPurchase.stock_quantity)
                 }, { headers: { Authorization: "Bearer " + token }});
@@ -247,7 +247,7 @@ new Vue({
         async updatePurchase() {
             try {
                 const token = localStorage.getItem("token");
-                await axios.put("http://127.0.0.1:5000/purchases/" + this.editPurchase.id, {
+                await axios.put("http://127.0.0.1:8000/purchases/" + this.editPurchase.id, {
                     product_id: Number(this.editPurchase.product_id),
                     stock_quantity: Number(this.editPurchase.stock_quantity)
                 }, { headers: { Authorization: "Bearer " + token }});
@@ -259,7 +259,7 @@ new Vue({
             if(!confirm("Are you sure you want to delete this purchase?")) return;
             try {
                 const token = localStorage.getItem("token");
-                await axios.delete("http://127.0.0.1:5000/purchases/" + id, { headers: { Authorization: "Bearer " + token }});
+                await axios.delete("http://127.0.0.1:8000/purchases/" + id, { headers: { Authorization: "Bearer " + token }});
                 this.fetchPurchases();
             } catch (err) { console.error(err); }
         },

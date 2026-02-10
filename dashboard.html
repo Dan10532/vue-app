@@ -115,6 +115,8 @@
         async fetchDashboardData() {
           try {
             const token = localStorage.getItem("token");
+            console.log("Token for dashboard:", token);
+      
 
             if (!token) {
               alert("Session expired. Please login.");
@@ -123,17 +125,17 @@
             }
 
             const response = await axios.get(
-              "http://127.0.0.1:5000/dashboard",
+              "http://127.0.0.1:8000/dashboard/spp",
               {
                 headers: {
                   Authorization: "Bearer " + token
                 }
               }
             );
-
-            this.labels = response.data.labels;
-            this.values = response.data.data;
-
+           
+            this.labels = response.data[0]["labels"];
+            this.values = response.data[0]["data"];
+            
             this.renderChart();
 
           } catch (error) {

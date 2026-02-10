@@ -227,14 +227,14 @@ new Vue({
         async fetchProducts() {
             try {
                 const token = localStorage.getItem("token");
-                const res = await axios.get("http://127.0.0.1:5000/products", { headers: { Authorization: "Bearer " + token } });
+                const res = await axios.get("http://127.0.0.1:8000/products", { headers: { Authorization: "Bearer " + token } });
                 this.products = res.data;
             } catch (err) { console.error(err); }
         },
         async fetchSales() {
             try {
                 const token = localStorage.getItem("token");
-                const res = await axios.get("http://127.0.0.1:5000/sales", { headers: { Authorization: "Bearer " + token } });
+                const res = await axios.get("http://127.0.0.1:8000/sales", { headers: { Authorization: "Bearer " + token } });
                 this.sales = res.data;
                 setTimeout(() => { new DataTable('#salesTable'); }, 100);
             } catch (err) { console.error(err); }
@@ -242,7 +242,7 @@ new Vue({
         async addSale() {
             try {
                 const token = localStorage.getItem("token");
-                await axios.post("http://127.0.0.1:5000/sales", {
+                await axios.post("http://127.0.0.1:8000/sales", {
                     product_id: Number(this.newSale.product_id),
                     quantity: Number(this.newSale.quantity)
                 }, { headers: { Authorization: "Bearer " + token }});
@@ -258,7 +258,7 @@ new Vue({
         async updateSale() {
             try {
                 const token = localStorage.getItem("token");
-                await axios.put("http://127.0.0.1:5000/sales/" + this.editSale.id, {
+                await axios.put("http://127.0.0.1:8000/sales/" + this.editSale.id, {
                     product_id: Number(this.editSale.product_id),
                     quantity: Number(this.editSale.quantity)
                 }, { headers: { Authorization: "Bearer " + token }});
@@ -270,7 +270,7 @@ new Vue({
             if(!confirm("Are you sure you want to delete this sale?")) return;
             try {
                 const token = localStorage.getItem("token");
-                await axios.delete("http://127.0.0.1:5000/sales/" + id, { headers: { Authorization: "Bearer " + token }});
+                await axios.delete("http://127.0.0.1:8000/sales/" + id, { headers: { Authorization: "Bearer " + token }});
                 this.fetchSales();
             } catch (err) { console.error(err); }
         },
