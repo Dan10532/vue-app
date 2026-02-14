@@ -14,7 +14,8 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
     <style>
-        html, body {
+        html,
+        body {
             height: 100%;
             margin: 0;
         }
@@ -39,7 +40,7 @@
             color: white;
             text-align: center;
             padding: 12px 0;
-            margin-top: auto;
+            font-size: 0.9rem;
         }
 
         .modal-header.bg-primary {
@@ -55,225 +56,248 @@
 </head>
 
 <body>
-<div id="app">
+    <div id="app">
 
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark bg-opacity-75 shadow-sm fixed-top">
-  <div class="container-fluid">
-    <a class="navbar-brand fw-bold" href="index.html">MyDuka POS</a>
+        <!-- NAVBAR -->
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark bg-opacity-75 shadow-sm fixed-top">
+            <div class="container-fluid">
+                <a class="navbar-brand fw-bold" href="index.html">MyDuka POS</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
 
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown">
-      <span class="navbar-toggler-icon"></span>
-    </button>
+                <div class="collapse navbar-collapse justify-content-end" id="navbarNavDropdown">
+                    <ul class="navbar-nav">
+                        <li class="nav-item" v-if="isLoggedIn">
+                            <a class="nav-link" href="index.html">Home</a>
+                        </li>
+                        <li class="nav-item" v-if="isLoggedIn">
+                            <a class="nav-link" href="products.html">Products</a>
+                        </li>
+                        <li class="nav-item" v-if="isLoggedIn">
+                            <a class="nav-link active text-info fw-semibold" href="purchases.html">Purchases</a>
+                        </li>
+                        <li class="nav-item" v-if="isLoggedIn">
+                            <a class="nav-link" href="sales.html">Sales</a>
+                        </li>
+                        <li class="nav-item" v-if="isLoggedIn">
+                            <a class="nav-link" href="dashboard.html">Dashboard</a>
+                        </li>
 
-    <div class="collapse navbar-collapse justify-content-end" id="navbarNavDropdown">
-      <ul class="navbar-nav">
-
-        <li class="nav-item">
-          <a class="nav-link" href="index.html">Home</a>
-        </li>
-
-        <li class="nav-item">
-          <a class="nav-link " href="products.html">Products</a>
-        </li>
-
-        <li class="nav-item">
-          <a class="nav-link active text-info fw-semibold" href="purchases.html">Purchases</a>
-        </li>
-
-        <li class="nav-item">
-          <a class="nav-link" href="sales.html">Sales</a>
-        </li>
-
-        <li class="nav-item">
-          <a class="nav-link" href="dashboard.html">Dashboard</a>
-        </li>
-
-        <li class="nav-item">
-          <a class="nav-link text-danger fw-semibold" href="login.html" onclick="logout()">Logout</a>
-        </li>
-
-      </ul>
-    </div>
-  </div>
-</nav>
-
-
-    <!-- Page Header -->
-    <div class="container text-center my-5 pt-5">
-        <h2 class="fw-bold mt-4">Purchase Management</h2>
-        <p class="text-muted">Record and track your product purchases</p>
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#insertPurchaseModal">
-            + Insert Purchase
-        </button>
-    </div>
-
-    <!-- Insert Purchase Modal -->
-    <div class="modal fade" id="insertPurchaseModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-         aria-labelledby="insertPurchaseLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content border-0 shadow">
-                <div class="modal-header bg-primary text-white">
-                    <h5 class="modal-title" id="insertPurchaseLabel">Insert Purchase</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                            aria-label="Close"></button>
-                </div>
-
-                <div class="modal-body">
-                    <form @submit.prevent="addPurchase">
-                        <div class="mb-3">
-                            <label for="product_id" class="form-label fw-semibold">Product ID</label>
-                            <input type="number" class="form-control" v-model="newPurchase.product_id" id="product_id" required>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="stock_quantity" class="form-label fw-semibold">Stock Quantity</label>
-                            <input type="number" class="form-control" v-model="newPurchase.stock_quantity" id="stock_quantity" required>
-                        </div>
-
-                        <button type="submit" class="btn btn-primary w-100">Submit</button>
-                    </form>
+                        <li class="nav-item" v-if="!isLoggedIn">
+                            <a class="nav-link" href="login.html">Login</a>
+                        </li>
+                        <li class="nav-item" v-if="!isLoggedIn">
+                            <a class="nav-link" href="register.html">Register</a>
+                        </li>
+                        <li class="nav-item" v-if="isLoggedIn">
+                            <a class="nav-link text-danger fw-semibold" href="#" @click.prevent="logoutUser">Logout</a>
+                        </li>
+                    </ul>
                 </div>
             </div>
-        </div>
-    </div>
+        </nav>
 
-    <!-- Edit Purchase Modal -->
-    <div class="modal fade" id="editPurchaseModal" tabindex="-1" aria-labelledby="editPurchaseLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content border-0 shadow">
-                <div class="modal-header bg-warning text-dark">
-                    <h5 class="modal-title fw-bold" id="editPurchaseLabel">Edit Purchase</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <form @submit.prevent="updatePurchase">
-                        <input type="hidden" v-model="editPurchase.id">
-                        <div class="mb-3">
-                            <label for="edit_product" class="form-label fw-semibold">Product ID</label>
-                            <input type="number" class="form-control" v-model="editPurchase.product_id" id="edit_product" required>
+        <!-- PAGE HEADER -->
+        <main class="container text-center my-5 pt-5">
+            <h2 class="fw-bold mt-4">Purchase Management</h2>
+            <p class="text-muted">Record and track your product purchases</p>
+            <button type="button" class="btn btn-primary mb-4" data-bs-toggle="modal" data-bs-target="#insertPurchaseModal">
+                + Insert Purchase
+            </button>
+
+            <!-- Insert Purchase Modal -->
+            <div class="modal fade" id="insertPurchaseModal" data-bs-backdrop="static" data-bs-keyboard="false"
+                tabindex="-1" aria-labelledby="insertPurchaseLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content border-0 shadow">
+                        <div class="modal-header bg-primary text-white">
+                            <h5 class="modal-title" id="insertPurchaseLabel">Insert Purchase</h5>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                         </div>
-                        <div class="mb-3">
-                            <label for="edit_stock_quantity" class="form-label fw-semibold">Stock Quantity</label>
-                            <input type="number" class="form-control" v-model="editPurchase.stock_quantity" id="edit_stock_quantity" required>
+
+                        <div class="modal-body">
+                            <form @submit.prevent="addPurchase">
+                                <div class="mb-3">
+                                    <label class="form-label fw-semibold">Product ID</label>
+                                    <input type="number" class="form-control" v-model="newPurchase.product_id" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label fw-semibold">Stock Quantity</label>
+                                    <input type="number" class="form-control" v-model="newPurchase.stock_quantity" required>
+                                </div>
+                                <button type="submit" class="btn btn-primary w-100">Submit</button>
+                            </form>
                         </div>
-                        <button type="submit" class="btn btn-warning w-100 fw-bold">Update Purchase</button>
-                    </form>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
 
-    <!-- Purchases Table -->
-    <div class="container my-5">
-        <div class="card shadow-sm border-0">
-            <div class="card-body">
-                <table class="display table table-striped align-middle" id="purchaseTable" style="width:100%">
-                    <thead class="table-dark">
-                    <tr>
-                        <th>ID</th>
-                        <th>Product ID</th>
-                        <th>Stock Quantity</th>
-                        <th>Created At</th>
-                        <th>Actions</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr v-for="purchase in purchases" :key="purchase.id">
-                        <td>{{ purchase.id }}</td>
-                        <td>{{ purchase.product_id }}</td>
-                        <td>{{ purchase.stock_quantity }}</td>
-                        <td>{{ formatDate(purchase.created_at) }}</td>
-                        <td>
-                            <button class="btn btn-sm btn-warning me-1" @click="openEditModal(purchase)">
-                                <i class="bi bi-pencil-square"></i> Edit
-                            </button>
-                            <button class="btn btn-sm btn-danger" @click="deletePurchase(purchase.id)">
-                                <i class="bi bi-trash"></i> Delete
-                            </button>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
+            <!-- Edit Purchase Modal -->
+            <div class="modal fade" id="editPurchaseModal" tabindex="-1">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content border-0 shadow">
+                        <div class="modal-header bg-warning text-dark">
+                            <h5 class="modal-title fw-bold">Edit Purchase</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form @submit.prevent="updatePurchase">
+                                <input type="hidden" v-model="editPurchase.id">
+                                <div class="mb-3">
+                                    <label class="form-label fw-semibold">Product ID</label>
+                                    <input type="number" class="form-control" v-model="editPurchase.product_id" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label fw-semibold">Stock Quantity</label>
+                                    <input type="number" class="form-control" v-model="editPurchase.stock_quantity" required>
+                                </div>
+                                <button type="submit" class="btn btn-warning w-100 fw-bold">Update Purchase</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
+
+            <!-- Purchases Table -->
+            <div class="card shadow-sm border-0 mt-4">
+                <div class="card-body">
+                    <table class="display table table-striped align-middle" id="purchaseTable" style="width:100%">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>ID</th>
+                                <th>Product ID</th>
+                                <th>Stock Quantity</th>
+                                <th>Created At</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="purchase in purchases" :key="purchase.id">
+                                <td>{{ purchase.id }}</td>
+                                <td>{{ purchase.product_id }}</td>
+                                <td>{{ purchase.stock_quantity }}</td>
+                                <td>{{ formatDate(purchase.created_at) }}</td>
+                                <td>
+                                    <button class="btn btn-sm btn-warning me-1" @click="openEditModal(purchase)">
+                                        <i class="bi bi-pencil-square"></i> Edit
+                                    </button>
+                                    <button class="btn btn-sm btn-danger" @click="deletePurchase(purchase.id)">
+                                        <i class="bi bi-trash"></i> Delete
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </main>
+
+        <!-- FOOTER -->
+        <footer>
+            <small>© 2025 MyDuka POS — Smart Business Management</small>
+        </footer>
     </div>
 
-</div>
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.7.7/vue.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.8/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="//cdn.datatables.net/2.3.4/js/dataTables.min.js"></script>
 
-<!-- Footer -->
-<footer>
-    <small>© 2025 MyDuka POS — Smart Business Management</small>
-</footer>
+    <script>
+        new Vue({
+            el: "#app",
+            data: {
+                isLoggedIn: false,
+                purchases: [],
+                newPurchase: { product_id: '', stock_quantity: '' },
+                editPurchase: { id: '', product_id: '', stock_quantity: '' }
+            },
+            created() {
+                const token = localStorage.getItem("token");
+                this.isLoggedIn = !!token;
+                if (!token) {
+                    alert("Please login first.");
+                    window.location.href = "login.html";
+                }
+            },
+            methods: {
+                async fetchPurchases() {
+                    try {
+                        const token = localStorage.getItem("token");
+                        const res = await axios.get("http://127.0.0.1:8000/purchases", {
+                            headers: { Authorization: "Bearer " + token }
+                        });
+                        this.purchases = res.data;
 
-<!-- Scripts -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.7.7/vue.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.8/axios.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
-<script src="//cdn.datatables.net/2.3.4/js/dataTables.min.js"></script>
+                        this.$nextTick(() => {
+                            if ($.fn.DataTable.isDataTable('#purchaseTable')) $('#purchaseTable').DataTable().destroy();
+                            new DataTable('#purchaseTable');
+                        });
+                    } catch (err) { console.error(err); }
+                },
 
-<script>
-new Vue({
-    el: "#app",
-    data: {
-        purchases: [],
-        newPurchase: { product_id: '', stock_quantity: '' },
-        editPurchase: { id: '', product_id: '', stock_quantity: '' }
-    },
-    methods: {
-        async fetchPurchases() {
-            try {
-                const token = localStorage.getItem("token");
-                const res = await axios.get("http://127.0.0.1:8000/purchases", { headers: { Authorization: "Bearer " + token } });
-                this.purchases = res.data;
-                setTimeout(() => { new DataTable('#purchaseTable'); }, 100);
-            } catch (err) { console.error(err); }
-        },
-        async addPurchase() {
-            try {
-                const token = localStorage.getItem("token");
-                await axios.post("http://127.0.0.1:8000/purchases", {
-                    product_id: Number(this.newPurchase.product_id),
-                    stock_quantity: Number(this.newPurchase.stock_quantity)
-                }, { headers: { Authorization: "Bearer " + token }});
-                this.newPurchase = { product_id: '', stock_quantity: '' };
-                bootstrap.Modal.getInstance(document.getElementById('insertPurchaseModal')).hide();
-                this.fetchPurchases();
-            } catch (err) { console.error(err); }
-        },
-        openEditModal(purchase) {
-            this.editPurchase = { ...purchase };
-            new bootstrap.Modal(document.getElementById('editPurchaseModal')).show();
-        },
-        async updatePurchase() {
-            try {
-                const token = localStorage.getItem("token");
-                await axios.put("http://127.0.0.1:8000/purchases/" + this.editPurchase.id, {
-                    product_id: Number(this.editPurchase.product_id),
-                    stock_quantity: Number(this.editPurchase.stock_quantity)
-                }, { headers: { Authorization: "Bearer " + token }});
-                bootstrap.Modal.getInstance(document.getElementById('editPurchaseModal')).hide();
-                this.fetchPurchases();
-            } catch (err) { console.error(err); }
-        },
-        async deletePurchase(id) {
-            if(!confirm("Are you sure you want to delete this purchase?")) return;
-            try {
-                const token = localStorage.getItem("token");
-                await axios.delete("http://127.0.0.1:8000/purchases/" + id, { headers: { Authorization: "Bearer " + token }});
-                this.fetchPurchases();
-            } catch (err) { console.error(err); }
-        },
-        formatDate(dateStr) {
-            return new Date(dateStr).toLocaleString();
-        }
-    },
-    mounted() {
-        const token = localStorage.getItem("token");
-        if(!token) { alert("Please login first."); window.location.href="login.html"; return; }
-        this.fetchPurchases();
-    }
-});
-</script>
+                async addPurchase() {
+                    try {
+                        const token = localStorage.getItem('token');
+                        await axios.post('http://127.0.0.1:8000/purchases', {
+                            product_id: this.newPurchase.product_id,
+                            stock_quantity: this.newPurchase.stock_quantity,
+                            created_at: new Date().toISOString()
+                        }, { headers: { Authorization: "Bearer " + token } });
 
+                        alert("Purchase Added Successfully");
+                        this.fetchPurchases();
+                        this.newPurchase = { product_id: '', stock_quantity: '' };
+                        bootstrap.Modal.getOrCreateInstance(document.getElementById('insertPurchaseModal')).hide();
+                    } catch (err) { console.error(err); alert("Failed to add purchase"); }
+                },
+
+                openEditModal(purchase) {
+                    this.editPurchase = { ...purchase };
+                    bootstrap.Modal.getOrCreateInstance(document.getElementById('editPurchaseModal')).show();
+                },
+
+                async updatePurchase() {
+                    try {
+                        const token = localStorage.getItem('token');
+                        await axios.put(`http://127.0.0.1:8000/purchases/${this.editPurchase.id}`, {
+                            product_id: Number(this.editPurchase.product_id),
+                            stock_quantity: Number(this.editPurchase.stock_quantity)
+                        }, { headers: { Authorization: "Bearer " + token } });
+
+                        bootstrap.Modal.getInstance(document.getElementById('editPurchaseModal')).hide();
+                        this.fetchPurchases();
+                    } catch (err) { console.error(err); alert("Failed to update purchase"); }
+                },
+
+                async deletePurchase(id) {
+                    if (!confirm("Are you sure you want to delete this purchase?")) return;
+                    try {
+                        const token = localStorage.getItem('token');
+                        await axios.delete(`http://127.0.0.1:8000/purchases/${id}`, { headers: { Authorization: "Bearer " + token } });
+                        this.fetchPurchases();
+                    } catch (err) { console.error(err); }
+                },
+
+                formatDate(dateStr) {
+                    return new Date(dateStr).toLocaleString();
+                },
+
+                logoutUser() {
+                    localStorage.removeItem("token");
+                    this.isLoggedIn = false;
+                    window.location.href = "login.html";
+                }
+            },
+            mounted() {
+                if (this.isLoggedIn) this.fetchPurchases();
+            }
+        });
+    </script>
 </body>
+
 </html>

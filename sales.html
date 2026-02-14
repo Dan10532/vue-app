@@ -2,294 +2,287 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sales Page | Vue MyDuka POS</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sales Page | Vue MyDuka POS</title>
 
-    <!-- Bootstrap + DataTables -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="//cdn.datatables.net/2.3.4/css/dataTables.dataTables.min.css">
+  <!-- Bootstrap + DataTables -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="//cdn.datatables.net/2.3.4/css/dataTables.dataTables.min.css">
 
-    <!-- Bootstrap Icons -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
-    <style>
-        html, body {
-            height: 100%;
-            margin: 0;
-        }
+  <style>
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+    }
 
-        body {
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-            background-color: #f8f9fa;
-        }
+    body {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      background-color: #f8f9fa;
+    }
 
-        #app {
-            flex: 1;
-        }
+    #app {
+      flex: 1;
+    }
 
-        .card {
-            border-radius: 12px;
-        }
+    .card {
+      border-radius: 12px;
+    }
 
-        footer {
-            background: #212529;
-            color: white;
-            text-align: center;
-            padding: 12px 0;
-            margin-top: auto;
-        }
+    footer {
+      background: #212529;
+      color: white;
+      text-align: center;
+      padding: 12px 0;
+      margin-top: auto;
+      font-size: 0.9rem;
+    }
 
-        .modal-header.bg-primary {
-            border-top-left-radius: 12px;
-            border-top-right-radius: 12px;
-        }
-
-        .modal-header.bg-warning {
-            border-top-left-radius: 12px;
-            border-top-right-radius: 12px;
-        }
-    </style>
+    .modal-header.bg-primary,
+    .modal-header.bg-warning {
+      border-top-left-radius: 12px;
+      border-top-right-radius: 12px;
+    }
+  </style>
 </head>
 
 <body>
-<div id="app">
+  <div id="app">
 
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark bg-opacity-75 shadow-sm fixed-top">
-  <div class="container-fluid">
-    <a class="navbar-brand fw-bold" href="index.html">MyDuka POS</a>
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark bg-opacity-75 shadow-sm fixed-top">
+      <div class="container-fluid">
+        <a class="navbar-brand fw-bold" href="index.html">MyDuka POS</a>
 
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown">
-      <span class="navbar-toggler-icon"></span>
-    </button>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown">
+          <span class="navbar-toggler-icon"></span>
+        </button>
 
-    <div class="collapse navbar-collapse justify-content-end" id="navbarNavDropdown">
-      <ul class="navbar-nav">
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNavDropdown">
+          <ul class="navbar-nav">
 
-        <li class="nav-item">
-          <a class="nav-link" href="index.html">Home</a>
-        </li>
+            <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+            <li class="nav-item"><a class="nav-link" href="products.html">Products</a></li>
+            <li class="nav-item"><a class="nav-link" href="purchases.html">Purchases</a></li>
+            <li class="nav-item"><a class="nav-link active text-info fw-semibold" href="sales.html">Sales</a></li>
+            <li class="nav-item"><a class="nav-link" href="dashboard.html">Dashboard</a></li>
+            <li class="nav-item"><a class="nav-link text-danger fw-semibold" href="#" @click.prevent="logoutUser">Logout</a></li>
 
-        <li class="nav-item">
-          <a class="nav-link " href="products.html">Products</a>
-        </li>
-
-        <li class="nav-item">
-          <a class="nav-link" href="purchases.html">Purchases</a>
-        </li>
-
-        <li class="nav-item">
-          <a class="nav-link active text-info fw-semibold" href="sales.html">Sales</a>
-        </li>
-
-        <li class="nav-item">
-          <a class="nav-link" href="dashboard.html">Dashboard</a>
-        </li>
-
-        <li class="nav-item">
-          <a class="nav-link text-danger fw-semibold" href="login.html" onclick="logout()">Logout</a>
-        </li>
-
-      </ul>
-    </div>
-  </div>
-</nav>
+          </ul>
+        </div>
+      </div>
+    </nav>
 
     <!-- Page Header -->
     <div class="container text-center my-5 pt-5">
-        <h2 class="fw-bold mt-4">Sales Management</h2>
-        <p class="text-muted">Record and track your daily product sales</p>
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#insertSalesModal">
-            + Insert Sale
-        </button>
+      <h2 class="fw-bold mt-4">Sales Management</h2>
+      <p class="text-muted">Record and track your daily product sales</p>
+      <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#insertSalesModal">
+        + Insert Sale
+      </button>
     </div>
 
     <!-- Insert Sale Modal -->
     <div class="modal fade" id="insertSalesModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-         aria-labelledby="insertSalesLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content border-0 shadow">
-                <div class="modal-header bg-primary text-white">
-                    <h5 class="modal-title" id="insertSalesLabel">Insert Sale</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                            aria-label="Close"></button>
-                </div>
+      aria-labelledby="insertSalesLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+          <div class="modal-header bg-primary text-white">
+            <h5 class="modal-title" id="insertSalesLabel">Insert Sale</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+              aria-label="Close"></button>
+          </div>
 
-                <div class="modal-body">
-                    <form @submit.prevent="addSale">
-                        <div class="mb-3">
-                            <label for="product_id" class="form-label fw-semibold">Select Product</label>
-                            <select v-model="newSale.product_id" class="form-select" id="product_id" required>
-                                <option v-for="product in products" :value="product.id">{{ product.name }}</option>
-                            </select>
-                        </div>
+          <div class="modal-body">
+            <form @submit.prevent="addSale">
+              <div class="mb-3">
+                <label for="product_id" class="form-label fw-semibold">Select Product</label>
+                <select v-model="newSale.product_id" class="form-select" id="product_id" required>
+                  <option v-for="product in products" :value="product.id">{{ product.name }}</option>
+                </select>
+              </div>
 
-                        <div class="mb-3">
-                            <label for="quantity" class="form-label fw-semibold">Quantity</label>
-                            <input type="number" class="form-control" v-model="newSale.quantity" id="quantity" required>
-                        </div>
+              <div class="mb-3">
+                <label for="quantity" class="form-label fw-semibold">Quantity</label>
+                <input type="number" class="form-control" v-model="newSale.quantity" id="quantity" required>
+              </div>
 
-                        <button type="submit" class="btn btn-primary w-100">Submit</button>
-                    </form>
-                </div>
-            </div>
+              <button type="submit" class="btn btn-primary w-100">Submit</button>
+            </form>
+          </div>
         </div>
+      </div>
     </div>
 
     <!-- Edit Sale Modal -->
     <div class="modal fade" id="editSaleModal" tabindex="-1" aria-labelledby="editSaleLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content border-0 shadow">
-                <div class="modal-header bg-warning text-dark">
-                    <h5 class="modal-title fw-bold" id="editSaleLabel">Edit Sale</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="editSaleForm" @submit.prevent="updateSale">
-                        <input type="hidden" v-model="editSale.id">
-                        <div class="mb-3">
-                            <label for="edit_product" class="form-label fw-semibold">Product</label>
-                            <select v-model="editSale.product_id" class="form-select" id="edit_product" required>
-                                <option v-for="product in products" :value="product.id">{{ product.name }}</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="edit_quantity" class="form-label fw-semibold">Quantity</label>
-                            <input type="number" class="form-control" v-model="editSale.quantity" id="edit_quantity" required>
-                        </div>
-                        <button type="submit" class="btn btn-warning w-100 fw-bold">Update Sale</button>
-                    </form>
-                </div>
-            </div>
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+          <div class="modal-header bg-warning text-dark">
+            <h5 class="modal-title fw-bold" id="editSaleLabel">Edit Sale</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <form @submit.prevent="updateSale">
+              <input type="hidden" v-model="editSale.id">
+              <div class="mb-3">
+                <label for="edit_product" class="form-label fw-semibold">Product</label>
+                <select v-model="editSale.product_id" class="form-select" id="edit_product" required>
+                  <option v-for="product in products" :value="product.id">{{ product.name }}</option>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label for="edit_quantity" class="form-label fw-semibold">Quantity</label>
+                <input type="number" class="form-control" v-model="editSale.quantity" id="edit_quantity" required>
+              </div>
+              <button type="submit" class="btn btn-warning w-100 fw-bold">Update Sale</button>
+            </form>
+          </div>
         </div>
+      </div>
     </div>
 
     <!-- Sales Table -->
     <div class="container my-5">
-        <div class="card shadow-sm border-0">
-            <div class="card-body">
-                <table class="display table table-striped align-middle" id="salesTable" style="width:100%">
-                    <thead class="table-dark">
-                    <tr>
-                        <th>ID</th>
-                        <th>Product Name</th>
-                        <th>Quantity</th>
-                        <th>Created At</th>
-                        <th>Actions</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr v-for="sale in sales" :key="sale.id">
-                        <td>{{ sale.id }}</td>
-                        <td>{{ getProductName(sale.product_id) }}</td>
-                        <td>{{ sale.quantity }}</td>
-                        <td>{{ formatDate(sale.created_at) }}</td>
-                        <td>
-                            <button class="btn btn-sm btn-warning me-1" @click="openEditModal(sale)">
-                                <i class="bi bi-pencil-square"></i> Edit
-                            </button>
-                            <button class="btn btn-sm btn-danger" @click="deleteSale(sale.id)">
-                                <i class="bi bi-trash"></i> Delete
-                            </button>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
+      <div class="card shadow-sm border-0">
+        <div class="card-body">
+          <table class="display table table-striped align-middle" id="salesTable" style="width:100%">
+            <thead class="table-dark">
+              <tr>
+                <th>ID</th>
+                <th>Product Name</th>
+                <th>Quantity</th>
+                <th>Created At</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="sale in sales" :key="sale.id">
+                <td>{{ sale.id }}</td>
+                <td>{{ getProductName(sale.product_id) }}</td>
+                <td>{{ sale.quantity }}</td>
+                <td>{{ formatDate(sale.created_at) }}</td>
+                <td>
+                  <button class="btn btn-sm btn-warning me-1" @click="openEditModal(sale)">
+                    <i class="bi bi-pencil-square"></i> Edit
+                  </button>
+                  <button class="btn btn-sm btn-danger" @click="deleteSale(sale.id)">
+                    <i class="bi bi-trash"></i> Delete
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
+      </div>
     </div>
 
-</div>
+  </div>
 
-<!-- Footer -->
-<footer>
+  <!-- Footer -->
+  <footer>
     <small>© 2025 MyDuka POS — Smart Business Management</small>
-</footer>
+  </footer>
 
-<!-- Scripts -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.7.7/vue.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.8/axios.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
-<script src="//cdn.datatables.net/2.3.4/js/dataTables.min.js"></script>
+  <!-- Scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.7.7/vue.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.8/axios.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="//cdn.datatables.net/2.3.4/js/dataTables.min.js"></script>
 
-<script>
-new Vue({
-    el: "#app",
-    data: {
+  <script>
+    new Vue({
+      el: "#app",
+      data: {
         products: [],
         sales: [],
         newSale: { product_id: '', quantity: '' },
         editSale: { id: '', product_id: '', quantity: '' }
-    },
-    methods: {
+      },
+      methods: {
+        logoutUser() {
+          localStorage.removeItem("token");
+          window.location.href = "login.html";
+        },
         async fetchProducts() {
-            try {
-                const token = localStorage.getItem("token");
-                const res = await axios.get("http://127.0.0.1:8000/products", { headers: { Authorization: "Bearer " + token } });
-                this.products = res.data;
-            } catch (err) { console.error(err); }
+          try {
+            const token = localStorage.getItem("token");
+            const res = await axios.get("http://127.0.0.1:8000/products", { headers: { Authorization: "Bearer " + token } });
+            this.products = res.data;
+          } catch (err) { console.error(err); }
         },
         async fetchSales() {
-            try {
-                const token = localStorage.getItem("token");
-                const res = await axios.get("http://127.0.0.1:8000/sales", { headers: { Authorization: "Bearer " + token } });
-                this.sales = res.data;
-                setTimeout(() => { new DataTable('#salesTable'); }, 100);
-            } catch (err) { console.error(err); }
+          try {
+            const token = localStorage.getItem("token");
+            const res = await axios.get("http://127.0.0.1:8000/sales", { headers: { Authorization: "Bearer " + token } });
+            this.sales = res.data;
+
+            // Re-draw DataTable safely
+            this.$nextTick(() => {
+              if ($.fn.DataTable.isDataTable('#salesTable')) $('#salesTable').DataTable().destroy();
+              $('#salesTable').DataTable();
+            });
+
+          } catch (err) { console.error(err); }
         },
         async addSale() {
-            try {
-                const token = localStorage.getItem("token");
-                await axios.post("http://127.0.0.1:8000/sales", {
-                    product_id: Number(this.newSale.product_id),
-                    quantity: Number(this.newSale.quantity)
-                }, { headers: { Authorization: "Bearer " + token }});
-                this.newSale = { product_id: '', quantity: '' };
-                bootstrap.Modal.getInstance(document.getElementById('insertSalesModal')).hide();
-                this.fetchSales();
-            } catch (err) { console.error(err); }
+          try {
+            const token = localStorage.getItem("token");
+            await axios.post("http://127.0.0.1:8000/sales", {
+              product_id: Number(this.newSale.product_id),
+              quantity: Number(this.newSale.quantity)
+            }, { headers: { Authorization: "Bearer " + token } });
+            this.newSale = { product_id: '', quantity: '' };
+            bootstrap.Modal.getInstance(document.getElementById('insertSalesModal')).hide();
+            this.fetchSales();
+          } catch (err) { console.error(err); }
         },
         openEditModal(sale) {
-            this.editSale = { ...sale };
-            new bootstrap.Modal(document.getElementById('editSaleModal')).show();
+          this.editSale = { ...sale };
+          new bootstrap.Modal(document.getElementById('editSaleModal')).show();
         },
         async updateSale() {
-            try {
-                const token = localStorage.getItem("token");
-                await axios.put("http://127.0.0.1:8000/sales/" + this.editSale.id, {
-                    product_id: Number(this.editSale.product_id),
-                    quantity: Number(this.editSale.quantity)
-                }, { headers: { Authorization: "Bearer " + token }});
-                bootstrap.Modal.getInstance(document.getElementById('editSaleModal')).hide();
-                this.fetchSales();
-            } catch (err) { console.error(err); }
+          try {
+            const token = localStorage.getItem("token");
+            await axios.put("http://127.0.0.1:8000/sales/" + this.editSale.id, {
+              product_id: Number(this.editSale.product_id),
+              quantity: Number(this.editSale.quantity)
+            }, { headers: { Authorization: "Bearer " + token } });
+            bootstrap.Modal.getInstance(document.getElementById('editSaleModal')).hide();
+            this.fetchSales();
+          } catch (err) { console.error(err); }
         },
         async deleteSale(id) {
-            if(!confirm("Are you sure you want to delete this sale?")) return;
-            try {
-                const token = localStorage.getItem("token");
-                await axios.delete("http://127.0.0.1:8000/sales/" + id, { headers: { Authorization: "Bearer " + token }});
-                this.fetchSales();
-            } catch (err) { console.error(err); }
+          if (!confirm("Are you sure you want to delete this sale?")) return;
+          try {
+            const token = localStorage.getItem("token");
+            await axios.delete("http://127.0.0.1:8000/sales/" + id, { headers: { Authorization: "Bearer " + token } });
+            this.fetchSales();
+          } catch (err) { console.error(err); }
         },
         getProductName(id) {
-            const product = this.products.find(p => p.id === id);
-            return product ? product.name : '';
+          const product = this.products.find(p => p.id === id);
+          return product ? product.name : '';
         },
         formatDate(dateStr) {
-            return new Date(dateStr).toLocaleString();
+          return new Date(dateStr).toLocaleString();
         }
-    },
-    mounted() {
+      },
+      mounted() {
         const token = localStorage.getItem("token");
-        if(!token) { alert("Please login first."); window.location.href="login.html"; return; }
+        if (!token) { alert("Please login first."); window.location.href = "login.html"; return; }
         this.fetchProducts();
         this.fetchSales();
-    }
-});
-</script>
+      }
+    });
+  </script>
 
 </body>
 </html>
