@@ -16,3 +16,6 @@ Create a file called **Dockerfile**.
 ### 2. Build the Docker Image
 ```bash
 docker build -t vue-pos .
+
+### 3. Youtube Docker tutorial 
+https://www.youtube.com/watch?v=pg19Z8LL06w
