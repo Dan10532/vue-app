@@ -1,8 +1,18 @@
-This is my POS built with VueJS 3 framework-CDN that is running on Docker.
+# POS Built with VueJS 3 (CDN) Running on Docker
 
-Docker Commands 
+This is a Point of Sale (POS) system built using the VueJS 3 framework (CDN version) and deployed using Docker.
 
-Create a file called Dockerfile - This holds the configuration/specification of your computer.
-Run the command docker build -t vue-pos . - This is building the computer (image) specified in the Dockerfile. -t means tagname.
-Run the command docker run -p 2000:80 -d -t vue-pos - This powers the computer (container). 5000 means the external port (host) 80 exposes the NGINX
-in the container -t is the image created above. -d makes the container run in the background even if you close the terminal.
+---
+
+## 🐳 Docker Commands
+
+### 1. Create a Dockerfile
+Create a file called **Dockerfile**.
+
+- This file contains the configuration/specification of your application environment (your “computer”).
+
+---
+
+### 2. Build the Docker Image
+```bash
+docker build -t vue-pos .
