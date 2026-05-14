@@ -5,50 +5,139 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>MyDuka POS | Dashboard</title>
 
-  <!-- Bootstrap -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@500;600;700;800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 
   <style>
+    :root {
+      --bg: #0f0f13;
+      --bg-soft: #171720;
+      --card: #1a1a24;
+      --stroke: #2e2d3d;
+      --muted: #7f7d93;
+      --text: #ecebf4;
+      --indigo: #6366f1;
+      --emerald: #10b981;
+      --amber: #f59e0b;
+      --cyan: #22d3ee;
+    }
+
+    * { box-sizing: border-box; }
+
     body {
       min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      background-color: #f8f9fa;
       margin: 0;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      background:
+        radial-gradient(900px 500px at -12% -10%, rgba(99,102,241,0.35), transparent 60%),
+        radial-gradient(700px 460px at 115% 25%, rgba(16,185,129,0.22), transparent 62%),
+        var(--bg);
     }
+    h1, h2, h3, .navbar-brand { font-family: 'Syne', sans-serif; }
 
-    #app {
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-    }
+    #app { min-height: 100vh; }
 
-    main {
-      flex: 1;
-    }
-
-    .chart-card {
-      background: #fff;
-      border-radius: 12px;
-      padding: 20px;
-      box-shadow: 0 5px 16px rgba(0, 0, 0, 0.08);
-    }
-
-    footer {
-      background: #212529;
-      color: #fff;
-      text-align: center;
-      padding: 12px 0;
+    .navbar {
+      background: rgba(15,15,19,.84) !important;
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(255,255,255,.08);
     }
 
     .navbar .nav-link,
-    .navbar-brand {
-      color: white !important;
-    }
+    .navbar-brand { color: #fff !important; }
 
     .navbar .nav-link.active {
-      color: #0dcaf0 !important;
+      color: #c5c6ff !important;
+      background: rgba(99,102,241,.14);
+      border-radius: .7rem;
+      padding-inline: .8rem;
+    }
+
+    .dashboard-wrap { padding: 7rem 0 3rem; }
+
+    .panel {
+      background: var(--card);
+      border: 1px solid var(--stroke);
+      border-radius: 1.05rem;
+    }
+
+    .hero-panel {
+      background:
+        linear-gradient(120deg, rgba(99,102,241,.18), rgba(99,102,241,.03) 55%),
+        var(--bg-soft);
+      border: 1px solid var(--stroke);
+      border-radius: 1.1rem;
+      padding: 1.2rem;
+    }
+
+    .metric-card {
+      background: linear-gradient(160deg, rgba(255,255,255,.015), rgba(255,255,255,0));
+      border: 1px solid var(--stroke);
+      border-radius: .95rem;
+      padding: 1rem;
+      height: 100%;
+    }
+
+    .metric-icon {
+      width: 2.3rem;
+      height: 2.3rem;
+      border-radius: .75rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: .7rem;
+    }
+
+    .metric-label {
+      font-size: .74rem;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      color: var(--muted);
+      margin-bottom: .25rem;
+    }
+
+    .metric-value {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: #fff;
+      margin: 0;
+    }
+
+    .panel-title {
+      font-size: 1rem;
+      font-weight: 600;
+      margin: 0;
+    }
+
+    .panel-sub {
+      color: var(--muted);
+      font-size: .82rem;
+      margin-top: .2rem;
+    }
+
+    .chart-box {
+      height: 320px;
+      position: relative;
+    }
+
+    .empty-note {
+      color: var(--muted);
+      font-size: .9rem;
+      text-align: center;
+      padding: 3rem 1rem;
+    }
+
+    footer {
+      background: rgba(10,10,14,.88);
+      border-top: 1px solid #1a1a24;
+      color: #6b6980;
+      text-align: center;
+      padding: 12px 0;
+      font-size: .82rem;
     }
   </style>
 </head>
@@ -56,9 +145,8 @@
 <body>
 <div id="app">
 
-<!-- NAVBAR -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark bg-opacity-75 shadow-sm fixed-top">
-  <div class="container-fluid">
+<nav class="navbar navbar-expand-lg fixed-top">
+  <div class="container-fluid px-3 px-lg-4">
     <a class="navbar-brand fw-bold" href="index.html">MyDuka POS</a>
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -66,145 +154,277 @@
     </button>
 
     <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-      <ul class="navbar-nav">
-
+      <ul class="navbar-nav gap-lg-1">
+        <li class="nav-item" v-if="isLoggedIn"><a class="nav-link" href="products.html">Products</a></li>
+        <li class="nav-item" v-if="isLoggedIn"><a class="nav-link" href="purchases.html">Purchases</a></li>
+        <li class="nav-item" v-if="isLoggedIn"><a class="nav-link" href="sales.html">Sales</a></li>
+        <li class="nav-item" v-if="isLoggedIn"><a class="nav-link active fw-semibold" href="dashboard.html">Dashboard</a></li>
+        <li class="nav-item" v-if="!isLoggedIn"><a class="nav-link" href="login.html">Login</a></li>
+        <li class="nav-item" v-if="!isLoggedIn"><a class="nav-link" href="register.html">Register</a></li>
         <li class="nav-item" v-if="isLoggedIn">
-          <a class="nav-link" href="products.html">Products</a>
+          <a class="nav-link text-danger fw-semibold" href="#" @click.prevent="logoutUser">Logout</a>
         </li>
-
-        <li class="nav-item" v-if="isLoggedIn">
-          <a class="nav-link" href="purchases.html">Purchases</a>
-        </li>
-
-        <li class="nav-item" v-if="isLoggedIn">
-          <a class="nav-link" href="sales.html">Sales</a>
-        </li>
-
-        <li class="nav-item" v-if="isLoggedIn">
-          <a class="nav-link active fw-semibold" href="dashboard.html">Dashboard</a>
-        </li>
-
-        <li class="nav-item" v-if="!isLoggedIn">
-          <a class="nav-link" href="login.html">Login</a>
-        </li>
-
-        <li class="nav-item" v-if="!isLoggedIn">
-          <a class="nav-link" href="register.html">Register</a>
-        </li>
-
-        <li class="nav-item" v-if="isLoggedIn">
-          <a class="nav-link text-danger fw-semibold" href="#" @click.prevent="logoutUser">
-            Logout
-          </a>
-        </li>
-
       </ul>
     </div>
   </div>
 </nav>
 
+<main class="dashboard-wrap">
+  <div class="container px-3 px-lg-4">
+    <section class="hero-panel mb-4 mb-lg-5">
+      <div class="d-flex flex-wrap align-items-center justify-content-between gap-3">
+        <div>
+          <h1 class="h4 mb-1 fw-bold">Business Dashboard</h1>
+          <p class="mb-0" style="color: var(--muted);">Track stock, sales flow and key retail metrics in real time.</p>
+        </div>
+        <span class="badge text-bg-dark" style="background:#242334 !important; border:1px solid #343247;">Live Data</span>
+      </div>
+    </section>
 
-<!-- PAGE CONTENT -->
-<main class="container pt-5 mt-5">
-  <div class="row justify-content-center">
-    <div class="col-lg-10">
+    <section class="row g-3 g-lg-4 mb-4 mb-lg-5">
+      <div class="col-6 col-lg-3">
+        <div class="metric-card">
+          <span class="metric-icon" style="background: rgba(99,102,241,.15); color:#a5b4fc;"><i class="bi bi-box-seam"></i></span>
+          <p class="metric-label">Products</p>
+          <p class="metric-value">{{ metrics.products }}</p>
+        </div>
+      </div>
+      <div class="col-6 col-lg-3">
+        <div class="metric-card">
+          <span class="metric-icon" style="background: rgba(16,185,129,.15); color:#6ee7b7;"><i class="bi bi-cart-check"></i></span>
+          <p class="metric-label">Purchases</p>
+          <p class="metric-value">{{ metrics.purchases }}</p>
+        </div>
+      </div>
+      <div class="col-6 col-lg-3">
+        <div class="metric-card">
+          <span class="metric-icon" style="background: rgba(245,158,11,.15); color:#fcd34d;"><i class="bi bi-graph-up-arrow"></i></span>
+          <p class="metric-label">Sales</p>
+          <p class="metric-value">{{ metrics.sales }}</p>
+        </div>
+      </div>
+      <div class="col-6 col-lg-3">
+        <div class="metric-card">
+          <span class="metric-icon" style="background: rgba(34,211,238,.15); color:#67e8f9;"><i class="bi bi-layers"></i></span>
+          <p class="metric-label">Remaining Units</p>
+          <p class="metric-value">{{ metrics.remainingTotal }}</p>
+        </div>
+      </div>
+    </section>
 
-      <div class="chart-card">
-        <h5 class="mb-4 fw-semibold text-center">
-          Remaining Stock per Product
-        </h5>
-
-        <canvas id="myChart" height="120"></canvas>
+    <section class="row g-3 g-lg-4">
+      <div class="col-12 col-lg-8">
+        <div class="panel p-3 p-lg-4">
+          <h2 class="panel-title">Remaining Stock per Product</h2>
+          <p class="panel-sub">Each bar shows available units for a product.</p>
+          <div v-if="labels.length" class="chart-box mt-3">
+            <canvas id="stockChart"></canvas>
+          </div>
+          <div v-else class="empty-note">No stock data available yet.</div>
+        </div>
       </div>
 
-    </div>
+      <div class="col-12 col-lg-4">
+        <div class="panel p-3 p-lg-4 h-100">
+          <h2 class="panel-title">Stock Distribution</h2>
+          <p class="panel-sub">Share of total stock by product.</p>
+          <div v-if="labels.length" class="chart-box mt-3" style="height: 280px;">
+            <canvas id="mixChart"></canvas>
+          </div>
+          <div v-else class="empty-note">No distribution data yet.</div>
+        </div>
+      </div>
+    </section>
   </div>
 </main>
 
-
-<!-- FOOTER -->
 <footer>
-  <p class="mb-0 small">&copy; 2025 MyDuka POS. All rights reserved.</p>
+  <p class="mb-0">&copy; 2026 MyDuka POS. Smart retail control for growing shops.</p>
 </footer>
 
-</div> <!-- END VUE APP -->
+</div>
 
-
-<!-- SCRIPTS -->
 <script src="https://cdn.jsdelivr.net/npm/vue@2.7.7/dist/vue.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
-let chartInstance = null;
+let stockChart = null;
+let mixChart = null;
 
 new Vue({
   el: '#app',
-
   data: {
     labels: [],
     values: [],
-    isLoggedIn: false
+    isLoggedIn: false,
+    metrics: {
+      products: 0,
+      purchases: 0,
+      sales: 0,
+      remainingTotal: 0,
+    }
   },
 
   created() {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem('token');
     this.isLoggedIn = !!token;
 
     if (!token) {
-      alert("Please login first.");
-      window.location.href = "login.html";
+      alert('Please login first.');
+      window.location.href = 'login.html';
     }
   },
 
   methods: {
-
     async fetchDashboardData() {
       try {
-        const token = localStorage.getItem("token");
+        const token = localStorage.getItem('token');
 
-        const response = await axios.get(
-          "http://127.0.0.1:8000/dashboard/spp",
-          {
-            headers: {
-              Authorization: "Bearer " + token
-            }
-          }
-        );
+        const [productsRes, purchasesRes, salesRes] = await Promise.allSettled([
+          axios.get('http://127.0.0.1:8000/products', {
+            headers: { Authorization: 'Bearer ' + token }
+          }),
+          axios.get('http://127.0.0.1:8000/purchases', {
+            headers: { Authorization: 'Bearer ' + token }
+          }),
+          axios.get('http://127.0.0.1:8000/sales', {
+            headers: { Authorization: 'Bearer ' + token }
+          })
+        ]);
 
-        this.labels = response.data[0]["labels"];
-        this.values = response.data[0]["data"];
+        const products = productsRes.status === 'fulfilled' ? (productsRes.value.data || []) : [];
+        const purchases = purchasesRes.status === 'fulfilled' ? (purchasesRes.value.data || []) : [];
+        const sales = salesRes.status === 'fulfilled' ? (salesRes.value.data || []) : [];
 
-        this.renderChart();
+        const purchasedByProduct = {};
+        const soldByProduct = {};
 
+        purchases.forEach((p) => {
+          const pid = Number(p.product_id);
+          purchasedByProduct[pid] = (purchasedByProduct[pid] || 0) + Number(p.stock_quantity || 0);
+        });
+
+        sales.forEach((s) => {
+          const pid = Number(s.product_id);
+          soldByProduct[pid] = (soldByProduct[pid] || 0) + Number(s.quantity || 0);
+        });
+
+        const labels = [];
+        const values = [];
+        products.forEach((product) => {
+          const pid = Number(product.id);
+          const remaining = (purchasedByProduct[pid] || 0) - (soldByProduct[pid] || 0);
+          labels.push(product.name);
+          values.push(remaining);
+        });
+
+        this.labels = labels;
+        this.values = values;
+
+        this.metrics.products = products.length;
+        this.metrics.purchases = purchases.length;
+        this.metrics.sales = sales.length;
+        this.metrics.remainingTotal = this.values.reduce((sum, v) => sum + Number(v || 0), 0);
+
+        this.$nextTick(() => {
+          this.renderCharts();
+        });
       } catch (error) {
-        alert("Failed to load dashboard data");
+        console.error(error);
+        const msg = error?.response?.data?.detail || error?.message || 'Failed to load dashboard data';
+        alert(msg);
       }
     },
 
-    renderChart() {
-      const ctx = document.getElementById('myChart');
+    renderCharts() {
+      if (stockChart) stockChart.destroy();
+      if (mixChart) mixChart.destroy();
 
-      if (chartInstance) {
-        chartInstance.destroy();
-      }
+      const stockCtx = document.getElementById('stockChart');
+      const mixCtx = document.getElementById('mixChart');
 
-      chartInstance = new Chart(ctx, {
+      if (!stockCtx || !mixCtx) return;
+
+      const barGradient = stockCtx.getContext('2d').createLinearGradient(0, 0, 0, 260);
+      barGradient.addColorStop(0, 'rgba(99,102,241,0.72)');
+      barGradient.addColorStop(1, 'rgba(99,102,241,0.12)');
+
+      stockChart = new Chart(stockCtx, {
         type: 'bar',
         data: {
           labels: this.labels,
           datasets: [{
             label: 'Remaining Stock Quantity',
             data: this.values,
-            borderWidth: 1
+            backgroundColor: barGradient,
+            borderColor: '#818cf8',
+            borderWidth: 2,
+            borderRadius: 10,
+            borderSkipped: false,
           }]
         },
         options: {
           responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { labels: { color: '#b5b3c8' } },
+            tooltip: {
+              backgroundColor: '#1a1a24',
+              borderColor: '#2e2d3d',
+              borderWidth: 1,
+              titleColor: '#efeff8',
+              bodyColor: '#c9c7da',
+            }
+          },
           scales: {
+            x: {
+              ticks: { color: '#8987a2' },
+              grid: { color: 'rgba(255,255,255,0.04)' },
+              border: { color: '#2e2d3d' }
+            },
             y: {
-              beginAtZero: true
+              beginAtZero: true,
+              ticks: { color: '#8987a2' },
+              grid: { color: 'rgba(255,255,255,0.04)' },
+              border: { color: '#2e2d3d' }
+            }
+          }
+        }
+      });
+
+      mixChart = new Chart(mixCtx, {
+        type: 'doughnut',
+        data: {
+          labels: this.labels,
+          datasets: [{
+            data: this.values.map(v => Math.max(0, Number(v) || 0)),
+            backgroundColor: [
+              '#6366f1', '#14b8a6', '#f59e0b', '#22d3ee', '#ef4444', '#8b5cf6', '#84cc16', '#f97316'
+            ],
+            borderColor: '#1a1a24',
+            borderWidth: 2,
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'bottom',
+              labels: {
+                color: '#b5b3c8',
+                boxWidth: 12,
+                boxHeight: 12,
+              }
+            },
+            tooltip: {
+              backgroundColor: '#1a1a24',
+              borderColor: '#2e2d3d',
+              borderWidth: 1,
+              titleColor: '#efeff8',
+              bodyColor: '#c9c7da',
             }
           }
         }
@@ -212,19 +432,15 @@ new Vue({
     },
 
     logoutUser() {
-      localStorage.removeItem("token");
+      localStorage.removeItem('token');
       this.isLoggedIn = false;
-      window.location.href = "login.html";
+      window.location.href = 'login.html';
     }
-
   },
 
   mounted() {
-    if (this.isLoggedIn) {
-      this.fetchDashboardData();
-    }
+    if (this.isLoggedIn) this.fetchDashboardData();
   }
-
 });
 </script>
 

@@ -4,18 +4,34 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>MyDuka POS - Login</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
+    :root {
+      --bg: #0f0f13;
+      --card: #1a1a24;
+      --stroke: #2e2d3d;
+      --muted: #8a88a2;
+      --text: #ecebf4;
+    }
+
     body {
-      background-color: #f8f9fa;
-      font-family: 'Poppins', sans-serif;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       margin: 0;
       padding: 0;
+      background:
+        radial-gradient(900px 500px at -12% -10%, rgba(99,102,241,0.35), transparent 60%),
+        radial-gradient(700px 460px at 115% 25%, rgba(16,185,129,0.22), transparent 62%),
+        var(--bg);
     }
 
     .page-wrap {
@@ -32,41 +48,98 @@
     }
 
     .auth-card {
-      background: #fff;
+      background: #1a1a24;
       border-radius: 12px;
-      padding: 30px;
-      box-shadow: 0 5px 16px rgba(0,0,0,0.12);
+      border: 1px solid var(--stroke);
+      box-shadow: none;
       width: 100%;
       max-width: 450px;
+      overflow: hidden;
+    }
+    .auth-head {
+      background: linear-gradient(140deg, #4f46e5, #7c3aed);
+      padding: 1.75rem 1.5rem;
+      text-align: center;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+    }
+    .auth-head h3 {
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      margin: .4rem 0 0;
+      color: #fff;
+    }
+    .auth-head p { margin: .3rem 0 0; color: #d6d5ff; font-size: .92rem; }
+    .card-body {
+      color: #ecebf4;
+    }
+    .form-label {
+      color: #f4f3ff;
+      font-weight: 600;
+      margin-bottom: .4rem;
+    }
+    .auth-icon {
+      width: 3rem; height: 3rem; border-radius: .9rem;
+      margin: 0 auto;
+      display: inline-flex; align-items: center; justify-content: center;
+      background: rgba(255,255,255,.15);
+      color: #fff;
+      font-size: 1.25rem;
     }
 
     .form-control {
+      background: #0f0f13;
+      border-color: #2e2d3d;
+      color: #ecebf4;
       border-radius: 10px;
       padding: 10px 12px;
+    }
+    .form-control::placeholder {
+      color: #9a98ae;
+    }
+    .form-control:focus {
+      background: #0f0f13;
+      color: #ecebf4;
+      border-color: #6366f1;
+      box-shadow: 0 0 0 .2rem rgba(99,102,241,.2);
     }
 
     .btn-primary {
       border-radius: 10px;
       padding: 10px;
-      background-color: #0d6efd;
+      background-color: #6366f1;
+      border-color: #6366f1;
     }
+    .btn-primary:hover { background-color: #5658e7; border-color: #5658e7; }
 
     .site-footer {
-      background: #000;
-      color: #ccc;
+      background: rgba(10,10,14,.88);
+      color: #6b6980;
       padding: 15px 0;
       text-align: center;
       margin-top: auto;
-      border-top: 2px solid #0d6efd;
+      border-top: 1px solid #1a1a24;
     }
 
-    .navbar .nav-link,
-    .navbar-brand {
-      color: white !important;
+    .navbar {
+      background: rgba(15,15,19,.84) !important;
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(255,255,255,.08);
     }
-
+    .navbar .nav-link, .navbar-brand { color: #fff !important; }
     .navbar .nav-link.active {
-      color: #0dcaf0 !important;
+      color: #c5c6ff !important;
+      background: rgba(99,102,241,.14);
+      border-radius: .7rem;
+      padding-inline: .8rem;
+    }
+    .link-primary {
+      color: #a8adff !important;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .link-primary:hover {
+      color: #c7cbff !important;
+      text-decoration: underline;
     }
   </style>
 </head>
@@ -75,7 +148,7 @@
 <div id="app">
 
 <!-- NAVBAR -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark bg-opacity-75 shadow-sm fixed-top">
+<nav class="navbar navbar-expand-lg fixed-top">
   <div class="container-fluid">
     <a class="navbar-brand fw-bold" href="index.html">MyDuka POS</a>
 
@@ -131,8 +204,11 @@
 
         <div class="card auth-card shadow-lg">
           <div class="card-body p-4 p-md-5">
-            <h3 class="text-center mb-2 fw-semibold">Login</h3>
-            <p class="text-center text-muted mb-4">Enter your credentials to continue</p>
+            <div class="auth-head mb-4 mx-n4 mx-md-n5 mt-n4 mt-md-n5">
+              <div class="auth-icon"><i class="bi bi-shop-window"></i></div>
+              <h3>Welcome Back</h3>
+              <p>Sign in to your MyDuka workspace</p>
+            </div>
 
             <form @submit.prevent="loginUser">
               
@@ -169,7 +245,7 @@
 <!-- FOOTER -->
 <footer class="site-footer">
   <div class="container text-center">
-    <p class="mb-0 small">© 2025 MyDuka POS — All rights reserved.</p>
+    <p class="mb-0 small">&copy; 2026 MyDuka POS - All rights reserved.</p>
   </div>
 </footer>
 
@@ -202,6 +278,7 @@ new Vue({
           email: this.email,
           password: this.password
         });
+        console.log("login response data:", response.data);
 
         localStorage.setItem('token', response.data.access_token);
         this.isLoggedIn = true;
@@ -210,8 +287,10 @@ new Vue({
         window.location.href = "products.html";
 
       } catch (error) {
+        console.log("login error:", error.response);
         alert("Invalid email or password");
       }
+  
     },
 
     logoutUser() {
@@ -228,3 +307,4 @@ new Vue({
 
 </body>
 </html>
+
