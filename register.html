@@ -114,7 +114,7 @@
 
     .site-footer {
       background: rgba(10,10,14,.88);
-      color: #6b6980;
+      color: #a8b0c3;
       padding: 15px 0;
       text-align: center;
       margin-top: auto;
@@ -142,6 +142,23 @@
     .link-primary:hover {
       color: #c7cbff !important;
       text-decoration: underline;
+    }
+    .app-alert {
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,.1);
+      font-weight: 600;
+      padding: .85rem 1rem;
+      text-align: left;
+    }
+    .app-alert.alert-success {
+      background: rgba(16,185,129,.14);
+      color: #bbf7d0;
+      border-color: rgba(34,197,94,.35);
+    }
+    .app-alert.alert-danger {
+      background: rgba(239,68,68,.14);
+      color: #fecaca;
+      border-color: rgba(248,113,113,.35);
     }
   </style>
 </head>
@@ -187,6 +204,10 @@
                 </div>
 
                 <form @submit.prevent="registerUser">
+                  <div class="alert app-alert mb-3" :class="alertClass" role="alert" v-if="notice.show">
+                    {{ notice.message }}
+                  </div>
+
                   <div class="mb-3">
                     <label class="form-label">Full Name</label>
                     <input type="text" class="form-control" v-model="fullname" required>
@@ -203,10 +224,6 @@
                   </div>
 
                   <button type="submit" class="btn btn-primary w-100 mt-2">Register</button>
-
-                  <div class="alert alert-danger mt-3" role="alert" v-if="showError">
-                    {{ errorMessage }}
-                  </div>
 
                   <p class="text-center small mt-3 mb-0">
                     Already have an account?
@@ -242,50 +259,52 @@
         fullname: '',
         email: '',
         password: '',
-        errorMessage: '',
-        showError: false
+        notice: {
+          show: false,
+          type: 'danger',
+          message: ''
+        }
+      },
+      computed: {
+        alertClass() {
+          return this.notice.type === 'success' ? 'alert-success' : 'alert-danger';
+        }
       },
       methods: {
+        showNotice(type, message) {
+          this.notice = { show: true, type, message };
+        },
+        getErrorMessage(error) {
+          const detail = error.response && error.response.data && error.response.data.detail;
+          if (Array.isArray(detail) && detail.length && detail[0].msg) return detail[0].msg;
+          if (typeof detail === 'string') return detail;
+          if (error.message === 'Network Error') return 'Cannot reach the server. Please check that Docker is running.';
+          return 'Something went wrong. Please try again.';
+        },
         async registerUser() {
           try {
-            await axios.post('http://127.0.0.1:8000/register', {
+            const response = await axios.post('/api/register', {
               fullname: this.fullname,  // Must match backend
               email: this.email,
               password: this.password
-            }).then((response) => {
-              console.log("register response data:", response.data);
-            });
+            }, { withCredentials: true });
 
-            alert("Registration successful! Please login.");
-            // window.location.href = "login.html";
+            localStorage.setItem('token', response.data.access_token);
+            this.isLoggedIn = true;
+            this.showNotice('success', 'Account created. Taking you to products...');
+            setTimeout(() => {
+              window.location.href = "products.html";
+            }, 650);
 
           } catch (error) {
             console.log("register error:", error);
-           
-            if (error.message == "Network Error") {
-              this.errorMessage = "Something went wrong. Please try again.";
-              this.showError = true;
-              // this is where sentry high priority
-            }
-            else if(error.response.data.detail[0].msg != null) {
-              this.errorMessage = error.response.data.detail[0].msg;
-              this.showError = true;
-            }
-            else if (error.response.data.detail != null) {
-              this.errorMessage = error.response.data.detail;
-              this.showError = true;
-            }
-            else {
-              this.errorMessage = "Something went wrong. Please try again.";
-              this.showError = true;
-              // this is where we add sentry high priority
-            }
+            this.showNotice('danger', this.getErrorMessage(error));
           }
         },
         logoutUser() {
           localStorage.removeItem("token");
           this.isLoggedIn = false;
-          window.location.href = "login.html";
+          // window.location.href = "login.html";
         }
       }
     });

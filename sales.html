@@ -6,9 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sales Page | Vue MyDuka POS</title>
 
-  <!-- Bootstrap + DataTables -->
+  <!-- Bootstrap -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="//cdn.datatables.net/2.3.4/css/dataTables.dataTables.min.css">
 
 
   <!-- Bootstrap Icons -->
@@ -44,7 +43,7 @@
         var(--bg);
     }
 
-    #app {}
+    
 
     h1, h2, h3, .navbar-brand { font-family: 'Syne', sans-serif; }
 
@@ -76,24 +75,47 @@
     footer {
       background: rgba(10,10,14,.88);
       border-top: 1px solid #1a1a24;
-      color: #6b6980;
+      color: #a8b0c3;
       text-align: center;
       padding: 12px 0;
       margin-top: auto;
       font-size: 0.82rem;
     }
+    .app-alert {
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,.1);
+      font-weight: 600;
+      text-align: left;
+    }
+    .app-alert.alert-success {
+      background: rgba(16,185,129,.14);
+      color: #bbf7d0;
+      border-color: rgba(34,197,94,.35);
+    }
+    .app-alert.alert-danger {
+      background: rgba(239,68,68,.14);
+      color: #fecaca;
+      border-color: rgba(248,113,113,.35);
+    }
 
     .table-dark th {
       background: #15151f !important;
-      color: #b5b3c8 !important;
+      color: #f8fafc !important;
       border-color: #2e2d3d !important;
     }
     .table tbody td {
-      color: #d1cfe0 !important;
+      color: #f8fafc !important;
       border-color: #232233 !important;
-      background: transparent !important;
+      background: #111827 !important;
     }
-    table tbody tr:hover { background: rgba(255,255,255,0.03); }
+    .table-striped > tbody > tr:nth-of-type(odd) > * {
+      background: #162033 !important;
+      color: #f8fafc !important;
+    }
+    .table-hover > tbody > tr:hover > * {
+      background: #1f2a44 !important;
+      color: #fff !important;
+    }
     .modal-content {
       background: #171720;
       border: 1px solid var(--stroke);
@@ -109,6 +131,9 @@
       color: #ecebf4;
       border-color: #6366f1;
       box-shadow: 0 0 0 .2rem rgba(99,102,241,.2);
+    }
+    .text-muted {
+      color: #a8b0c3 !important;
     }
   </style>
 </head>
@@ -139,6 +164,9 @@
     <div class="container text-center my-5 pt-5">
       <h2 class="fw-bold mt-4">Sales Management</h2>
       <p style="color: var(--muted);">Track and manage sales</p>
+      <div class="alert app-alert mb-4" :class="alertClass" role="alert" v-if="notice.show">
+        {{ notice.message }}
+      </div>
       <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#insertSalesModal">
         + Insert Sale
       </button>
@@ -261,7 +289,7 @@
 
     <!-- SALES TABLE -->
     <div class="container my-4">
-      <table class="table table-striped" id="salesTable">
+      <table class="table table-striped table-hover align-middle" id="salesTable">
 
         <thead class="table-dark">
           <tr>
@@ -309,13 +337,9 @@
   </footer>
 
   <!-- SCRIPTS -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
-    integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
-    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.7.7/vue.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.8/axios.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="//cdn.datatables.net/2.3.4/js/dataTables.min.js"></script>
 
   <script>
     new Vue({
@@ -333,10 +357,32 @@
           phone: '',
           reference: ''
         },
-        payments: []
+        payments: [],
+        notice: { show: false, type: 'success', message: '' }
+      },
+      computed: {
+        alertClass() {
+          return this.notice.type === 'success' ? 'alert-success' : 'alert-danger';
+        }
       },
 
       methods: {
+        showNotice(type, message) {
+          this.notice = { show: true, type, message };
+          if (type === 'success') {
+            setTimeout(() => {
+              this.notice.show = false;
+            }, 3500);
+          }
+        },
+
+        getErrorMessage(err, fallback) {
+          const detail = err.response && err.response.data && err.response.data.detail;
+          if (Array.isArray(detail) && detail.length && detail[0].msg) return detail[0].msg;
+          if (typeof detail === 'string') return detail;
+          if (err.message === 'Network Error') return 'Cannot reach the server. Please check that Docker is running.';
+          return fallback;
+        },
 
         /* ================= SALES ================= */
 
@@ -381,7 +427,7 @@
           try {
             const token = localStorage.getItem("token");
 
-            await axios.post("http://127.0.0.1:8000/mpesa/stk-push", {
+            await axios.post("/api/mpesa/stk-push", {
               sale_id: this.payment.sale_id,
               amount: Number(this.payment.amount),
               phone_number: this.payment.phone
@@ -389,10 +435,9 @@
               headers: { Authorization: "Bearer " + token }
             });
 
-            alert("STK push sent successfully. Ask customer to complete payment on phone.");
-
             this.payment = { sale_id: '', amount: '', phone: '', reference: '' };
             await this.fetchPayments();
+            this.showNotice('success', 'STK push sent. Ask the customer to complete payment on their phone.');
 
             bootstrap.Modal.getInstance(
               document.getElementById('paymentModal')
@@ -400,8 +445,7 @@
 
           } catch (err) {
             console.error(err);
-            const msg = err?.response?.data?.detail || "Payment request failed";
-            alert(typeof msg === "string" ? msg : JSON.stringify(msg));
+            this.showNotice('danger', this.getErrorMessage(err, 'Payment request failed.'));
           }
         },
 
@@ -409,8 +453,8 @@
           try {
             const token = localStorage.getItem("token");
             const url = saleId
-              ? `http://127.0.0.1:8000/mpesa/payments?sale_id=${saleId}`
-              : "http://127.0.0.1:8000/mpesa/payments";
+              ? `/api/mpesa/payments?sale_id=${saleId}`
+              : "/api/mpesa/payments";
             const res = await axios.get(url, {
               headers: { Authorization: "Bearer " + token }
             });
@@ -425,7 +469,7 @@
           try {
             const token = localStorage.getItem("token");
             if (!token) {
-              alert("Please login first.");
+              this.showNotice('danger', 'Please login first.');
               return;
             }
 
@@ -434,7 +478,7 @@
               quantity: Number(this.newSale.quantity)
             };
 
-            await axios.post("http://127.0.0.1:8000/sales", payload, {
+            await axios.post("/api/sales", payload, {
               headers: { Authorization: "Bearer " + token }
             });
 
@@ -444,38 +488,39 @@
             const modalEl = document.getElementById('insertSalesModal');
             bootstrap.Modal.getInstance(modalEl)?.hide();
 
-            alert("Sale added successfully.");
+            this.showNotice('success', 'Sale added successfully.');
           } catch (err) {
             console.error(err);
-            const msg = err?.response?.data?.detail || "Failed to add sale.";
-            alert(typeof msg === "string" ? msg : JSON.stringify(msg));
+            this.showNotice('danger', this.getErrorMessage(err, 'Failed to add sale.'));
           }
         },
 
         async updateSale() {
           const token = localStorage.getItem("token");
 
-          await axios.put(`http://127.0.0.1:8000/sales/${this.editSale.id}`, this.editSale, {
+          await axios.put(`/api/sales/${this.editSale.id}`, this.editSale, {
             headers: { Authorization: "Bearer " + token }
           });
 
-          this.fetchSales();
+          await this.fetchSales();
+          this.showNotice('success', 'Sale updated successfully.');
         },
 
         async deleteSale(id) {
           const token = localStorage.getItem("token");
 
-          await axios.delete(`http://127.0.0.1:8000/sales/${id}`, {
+          await axios.delete(`/api/sales/${id}`, {
             headers: { Authorization: "Bearer " + token }
           });
 
-          this.fetchSales();
+          await this.fetchSales();
+          this.showNotice('success', 'Sale deleted successfully.');
         },
 
         async fetchProducts() {
           const token = localStorage.getItem("token");
 
-          const res = await axios.get("http://127.0.0.1:8000/products", {
+          const res = await axios.get("/api/products", {
             headers: { Authorization: "Bearer " + token }
           });
 
@@ -485,18 +530,11 @@
         async fetchSales() {
           const token = localStorage.getItem("token");
 
-          const res = await axios.get("http://127.0.0.1:8000/sales", {
+          const res = await axios.get("/api/sales", {
             headers: { Authorization: "Bearer " + token }
           });
 
           this.sales = res.data;
-
-          this.$nextTick(() => {
-            if ($.fn.DataTable.isDataTable('#salesTable')) {
-              $('#salesTable').DataTable().destroy();
-            }
-            $('#salesTable').DataTable();
-          });
         }
 
       },

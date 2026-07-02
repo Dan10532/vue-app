@@ -1,15 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>MyDuka POS - Login</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
 
   <style>
     :root {
@@ -29,8 +32,8 @@
       margin: 0;
       padding: 0;
       background:
-        radial-gradient(900px 500px at -12% -10%, rgba(99,102,241,0.35), transparent 60%),
-        radial-gradient(700px 460px at 115% 25%, rgba(16,185,129,0.22), transparent 62%),
+        radial-gradient(900px 500px at -12% -10%, rgba(99, 102, 241, 0.35), transparent 60%),
+        radial-gradient(700px 460px at 115% 25%, rgba(16, 185, 129, 0.22), transparent 62%),
         var(--bg);
     }
 
@@ -56,32 +59,46 @@
       max-width: 450px;
       overflow: hidden;
     }
+
     .auth-head {
       background: linear-gradient(140deg, #4f46e5, #7c3aed);
       padding: 1.75rem 1.5rem;
       text-align: center;
-      border-bottom: 1px solid rgba(255,255,255,.08);
+      border-bottom: 1px solid rgba(255, 255, 255, .08);
     }
+
     .auth-head h3 {
       font-family: 'Syne', sans-serif;
       font-weight: 700;
       margin: .4rem 0 0;
       color: #fff;
     }
-    .auth-head p { margin: .3rem 0 0; color: #d6d5ff; font-size: .92rem; }
+
+    .auth-head p {
+      margin: .3rem 0 0;
+      color: #d6d5ff;
+      font-size: .92rem;
+    }
+
     .card-body {
       color: #ecebf4;
     }
+
     .form-label {
       color: #f4f3ff;
       font-weight: 600;
       margin-bottom: .4rem;
     }
+
     .auth-icon {
-      width: 3rem; height: 3rem; border-radius: .9rem;
+      width: 3rem;
+      height: 3rem;
+      border-radius: .9rem;
       margin: 0 auto;
-      display: inline-flex; align-items: center; justify-content: center;
-      background: rgba(255,255,255,.15);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 255, 255, .15);
       color: #fff;
       font-size: 1.25rem;
     }
@@ -93,14 +110,16 @@
       border-radius: 10px;
       padding: 10px 12px;
     }
+
     .form-control::placeholder {
       color: #9a98ae;
     }
+
     .form-control:focus {
       background: #0f0f13;
       color: #ecebf4;
       border-color: #6366f1;
-      box-shadow: 0 0 0 .2rem rgba(99,102,241,.2);
+      box-shadow: 0 0 0 .2rem rgba(99, 102, 241, .2);
     }
 
     .btn-primary {
@@ -109,11 +128,15 @@
       background-color: #6366f1;
       border-color: #6366f1;
     }
-    .btn-primary:hover { background-color: #5658e7; border-color: #5658e7; }
+
+    .btn-primary:hover {
+      background-color: #5658e7;
+      border-color: #5658e7;
+    }
 
     .site-footer {
-      background: rgba(10,10,14,.88);
-      color: #6b6980;
+      background: rgba(10, 10, 14, .88);
+      color: #a8b0c3;
       padding: 15px 0;
       text-align: center;
       margin-top: auto;
@@ -121,190 +144,234 @@
     }
 
     .navbar {
-      background: rgba(15,15,19,.84) !important;
+      background: rgba(15, 15, 19, .84) !important;
       backdrop-filter: blur(14px);
-      border-bottom: 1px solid rgba(255,255,255,.08);
+      border-bottom: 1px solid rgba(255, 255, 255, .08);
     }
-    .navbar .nav-link, .navbar-brand { color: #fff !important; }
+
+    .navbar .nav-link,
+    .navbar-brand {
+      color: #fff !important;
+    }
+
     .navbar .nav-link.active {
       color: #c5c6ff !important;
-      background: rgba(99,102,241,.14);
+      background: rgba(99, 102, 241, .14);
       border-radius: .7rem;
       padding-inline: .8rem;
     }
+
     .link-primary {
       color: #a8adff !important;
       text-decoration: none;
       font-weight: 600;
     }
+
     .link-primary:hover {
       color: #c7cbff !important;
       text-decoration: underline;
+    }
+    .app-alert {
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,.1);
+      font-weight: 600;
+      padding: .85rem 1rem;
+      text-align: left;
+    }
+    .app-alert.alert-success {
+      background: rgba(16,185,129,.14);
+      color: #bbf7d0;
+      border-color: rgba(34,197,94,.35);
+    }
+    .app-alert.alert-danger {
+      background: rgba(239,68,68,.14);
+      color: #fecaca;
+      border-color: rgba(248,113,113,.35);
     }
   </style>
 </head>
 
 <body>
-<div id="app">
+  <div id="app">
 
-<!-- NAVBAR -->
-<nav class="navbar navbar-expand-lg fixed-top">
-  <div class="container-fluid">
-    <a class="navbar-brand fw-bold" href="index.html">MyDuka POS</a>
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg fixed-top">
+      <div class="container-fluid">
+        <a class="navbar-brand fw-bold" href="index.html">MyDuka POS</a>
 
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav">
-      <span class="navbar-toggler-icon"></span>
-    </button>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav">
+          <span class="navbar-toggler-icon"></span>
+        </button>
 
-    <div id="nav" class="collapse navbar-collapse justify-content-end">
-      <ul class="navbar-nav">
+        <div id="nav" class="collapse navbar-collapse justify-content-end">
+          <ul class="navbar-nav">
 
-        <!-- Logged In Links -->
-        <li class="nav-item" v-if="isLoggedIn">
-          <a class="nav-link" href="products.html">Products</a>
-        </li>
+            <!-- Logged In Links -->
+            <li class="nav-item" v-if="isLoggedIn">
+              <a class="nav-link" href="products.html">Products</a>
+            </li>
 
-        <li class="nav-item" v-if="isLoggedIn">
-          <a class="nav-link" href="purchases.html">Purchases</a>
-        </li>
+            <li class="nav-item" v-if="isLoggedIn">
+              <a class="nav-link" href="purchases.html">Purchases</a>
+            </li>
 
-        <li class="nav-item" v-if="isLoggedIn">
-          <a class="nav-link" href="sales.html">Sales</a>
-        </li>
+            <li class="nav-item" v-if="isLoggedIn">
+              <a class="nav-link" href="sales.html">Sales</a>
+            </li>
 
-        <li class="nav-item" v-if="isLoggedIn">
-          <a class="nav-link" href="dashboard.html">Dashboard</a>
-        </li>
+            <li class="nav-item" v-if="isLoggedIn">
+              <a class="nav-link" href="dashboard.html">Dashboard</a>
+            </li>
 
-        <!-- Login/Register -->
-        <li class="nav-item" v-if="!isLoggedIn">
-          <a class="nav-link active fw-semibold" href="login.html">Login</a>
-        </li>
+            <!-- Login/Register -->
+            <li class="nav-item" v-if="!isLoggedIn">
+              <a class="nav-link active fw-semibold" href="login.html">Login</a>
+            </li>
 
-        <li class="nav-item" v-if="!isLoggedIn">
-          <a class="nav-link" href="register.html">Register</a>
-        </li>
+            <li class="nav-item" v-if="!isLoggedIn">
+              <a class="nav-link" href="register.html">Register</a>
+            </li>
 
-        <!-- Logout -->
-        <li class="nav-item" v-if="isLoggedIn">
-          <a class="nav-link text-danger" href="#" @click.prevent="logoutUser">Logout</a>
-        </li>
+            <!-- Logout -->
+            <li class="nav-item" v-if="isLoggedIn">
+              <a class="nav-link text-danger" href="#" @click.prevent="logoutUser">Logout</a>
+            </li>
 
-      </ul>
-    </div>
-  </div>
-</nav>
+          </ul>
+        </div>
+      </div>
+    </nav>
 
 
-<!-- LOGIN FORM -->
-<main class="page-wrap">
-  <div class="container h-100">
-    <div class="row justify-content-center align-items-center center-area">
-      <div class="col-12 col-md-8 col-lg-5">
+    <!-- LOGIN FORM -->
+    <main class="page-wrap">
+      <div class="container h-100">
+        <div class="row justify-content-center align-items-center center-area">
+          <div class="col-12 col-md-8 col-lg-5">
 
-        <div class="card auth-card shadow-lg">
-          <div class="card-body p-4 p-md-5">
-            <div class="auth-head mb-4 mx-n4 mx-md-n5 mt-n4 mt-md-n5">
-              <div class="auth-icon"><i class="bi bi-shop-window"></i></div>
-              <h3>Welcome Back</h3>
-              <p>Sign in to your MyDuka workspace</p>
+            <div class="card auth-card shadow-lg">
+              <div class="card-body p-4 p-md-5">
+                <div class="auth-head mb-4 mx-n4 mx-md-n5 mt-n4 mt-md-n5">
+                  <div class="auth-icon"><i class="bi bi-shop-window"></i></div>
+                  <h3>Welcome Back</h3>
+                  <p>Sign in to your MyDuka workspace</p>
+                </div>
+
+                <form @submit.prevent="loginUser">
+                  <div class="alert app-alert mb-3" :class="alertClass" role="alert" v-if="notice.show">
+                    {{ notice.message }}
+                  </div>
+
+                  <div class="mb-3">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-control" v-model="email" required>
+                  </div>
+
+                  <div class="mb-3">
+                    <label class="form-label">Password</label>
+                    <input type="password" class="form-control" v-model="password" required>
+                  </div>
+
+                  <button type="submit" class="btn btn-primary w-100">
+                    Login
+                  </button>
+
+                  <p class="text-center small mt-3 mb-0">
+                    Don't have an account?
+                    <a href="register.html" class="link-primary">Register</a>
+                  </p>
+
+                </form>
+
+              </div>
             </div>
-
-            <form @submit.prevent="loginUser">
-              
-              <div class="mb-3">
-                <label class="form-label">Email</label>
-                <input type="email" class="form-control" v-model="email" required>
-              </div>
-
-              <div class="mb-3">
-                <label class="form-label">Password</label>
-                <input type="password" class="form-control" v-model="password" required>
-              </div>
-
-              <button type="submit" class="btn btn-primary w-100">
-                Login
-              </button>
-
-              <p class="text-center small mt-3 mb-0">
-                Don't have an account?
-                <a href="register.html" class="link-primary">Register</a>
-              </p>
-
-            </form>
 
           </div>
         </div>
-
       </div>
-    </div>
-  </div>
-</main>
+    </main>
 
 
-<!-- FOOTER -->
-<footer class="site-footer">
-  <div class="container text-center">
-    <p class="mb-0 small">&copy; 2026 MyDuka POS - All rights reserved.</p>
-  </div>
-</footer>
+    <!-- FOOTER -->
+    <footer class="site-footer">
+      <div class="container text-center">
+        <p class="mb-0 small">&copy; 2026 MyDuka POS - All rights reserved.</p>
+      </div>
+    </footer>
 
-</div> <!-- END VUE APP -->
+  </div> <!-- END VUE APP -->
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.7.7/vue.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.8/axios.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.7.7/vue.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.8/axios.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 
-<script>
-new Vue({
-  el: '#app',
+  <script>
+    new Vue({
+      el: '#app',
 
-  data: {
-    email: '',
-    password: '',
-    isLoggedIn: false
-  },
+      data: {
+        email: '',
+        password: '',
+        isLoggedIn: false,
+        notice: {
+          show: false,
+          type: 'danger',
+          message: ''
+        }
+      },
+      computed: {
+        alertClass() {
+          return this.notice.type === 'success' ? 'alert-success' : 'alert-danger';
+        }
+      },
 
-  created() {
-    const token = localStorage.getItem('token');
-    this.isLoggedIn = !!token;
-  },
+      created() {
+        const token = localStorage.getItem('token');
+        this.isLoggedIn = !!token;
+      },
 
-  methods: {
+      methods: {
+        showNotice(type, message) {
+          this.notice = { show: true, type, message };
+        },
 
-    async loginUser() {
-      try {
-        const response = await axios.post('http://127.0.0.1:8000/login', {
-          email: this.email,
-          password: this.password
-        });
-        console.log("login response data:", response.data);
+        async loginUser() {
+          try {
+            const response = await axios.post('/api/login', {
+              email: this.email,
+              password: this.password
+            }, { withCredentials: true });
+            console.log("login response data:", response.data);
 
-        localStorage.setItem('token', response.data.access_token);
-        this.isLoggedIn = true;
+            localStorage.setItem('token', response.data.access_token);
+            this.isLoggedIn = true;
 
-        alert("Login successful");
-        window.location.href = "products.html";
+            this.showNotice('success', 'Login successful. Taking you to products...');
+            setTimeout(() => {
+              window.location.href = "products.html";
+            }, 500);
 
-      } catch (error) {
-        console.log("login error:", error.response);
-        alert("Invalid email or password");
-      }
-  
-    },
+          } catch (error) {
+            console.log("login error:", error.response);
+            this.showNotice('danger', 'Invalid email or password.');
+          }
 
-    logoutUser() {
-      localStorage.removeItem('token');
-      this.isLoggedIn = false;
+        },
 
-      alert("Logged out successfully");
-      window.location.href = "login.html";
-    }
+        logoutUser() {
+          localStorage.removeItem('token');
+          this.isLoggedIn = false;
 
-  }
-});
-</script>
+          window.location.href = "login.html";
+        }
+
+
+      },
+      
+    });
+
+  </script>
 
 </body>
-</html>
 
+</html>

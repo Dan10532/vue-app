@@ -134,10 +134,20 @@
     footer {
       background: rgba(10,10,14,.88);
       border-top: 1px solid #1a1a24;
-      color: #6b6980;
+      color: #a8b0c3;
       text-align: center;
       padding: 12px 0;
       font-size: .82rem;
+    }
+    .app-alert {
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,.1);
+      font-weight: 600;
+    }
+    .app-alert.alert-danger {
+      background: rgba(239,68,68,.14);
+      color: #fecaca;
+      border-color: rgba(248,113,113,.35);
     }
   </style>
 </head>
@@ -180,6 +190,10 @@
         <span class="badge text-bg-dark" style="background:#242334 !important; border:1px solid #343247;">Live Data</span>
       </div>
     </section>
+
+    <div class="alert app-alert alert-danger mb-4" role="alert" v-if="notice.show">
+      {{ notice.message }}
+    </div>
 
     <section class="row g-3 g-lg-4 mb-4 mb-lg-5">
       <div class="col-6 col-lg-3">
@@ -264,7 +278,8 @@ new Vue({
       purchases: 0,
       sales: 0,
       remainingTotal: 0,
-    }
+    },
+    notice: { show: false, message: '' }
   },
 
   created() {
@@ -272,24 +287,28 @@ new Vue({
     this.isLoggedIn = !!token;
 
     if (!token) {
-      alert('Please login first.');
+      this.showNotice('Please login first.');
       window.location.href = 'login.html';
     }
   },
 
   methods: {
+    showNotice(message) {
+      this.notice = { show: true, message };
+    },
+
     async fetchDashboardData() {
       try {
         const token = localStorage.getItem('token');
 
         const [productsRes, purchasesRes, salesRes] = await Promise.allSettled([
-          axios.get('http://127.0.0.1:8000/products', {
+          axios.get('/api/products', {
             headers: { Authorization: 'Bearer ' + token }
           }),
-          axios.get('http://127.0.0.1:8000/purchases', {
+          axios.get('/api/purchases', {
             headers: { Authorization: 'Bearer ' + token }
           }),
-          axios.get('http://127.0.0.1:8000/sales', {
+          axios.get('/api/sales', {
             headers: { Authorization: 'Bearer ' + token }
           })
         ]);
@@ -334,7 +353,7 @@ new Vue({
       } catch (error) {
         console.error(error);
         const msg = error?.response?.data?.detail || error?.message || 'Failed to load dashboard data';
-        alert(msg);
+        this.showNotice(typeof msg === 'string' ? msg : JSON.stringify(msg));
       }
     },
 
